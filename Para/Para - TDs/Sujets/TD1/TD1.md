@@ -71,9 +71,35 @@ pourchaque 1 < i < n en parallèle
    instruction, eg, an addition with two operands as being one single instruction, i.e., do not decompose even more one
    such operation, like an addition, into its corresponding assembly code)
 
+4. Simulation CR de T[k] pour O(n) processeurs  
+   1 processeur lit seulment 1 T[k]  
+
+   $$
+   \begin{aligned}
+   A[0] &\rightarrow A[1] et A[2] \\
+   &\space\space\space\space \rightarrow \text{proc 1 duplique A[1] en A[3] et A[4]} \\
+   &\space\space\space\space \rightarrow \text{proc 2 duplique A[2] en A[5] et A[6]} \\
+   \end{aligned}
+   $$
+
 ## Exercice 3
 
 ![algorithme](image-001.png)
+
+```py
+# init 
+for each proessor in # do
+   if next[i] = NIL then 
+      d[i] = 0 
+   else 
+      d[i] = 1
+# main loop
+while (\exists object i t.q next[i] != NIL) do
+   for each proessor in # do
+      if next[i] != NIL then
+         d[i] = d[i] + d[next[i]]
+         next[i] = next[next[i]]
+```
 
 In the algorithm provided for the parallel computation of the maximum (version 2), the course has shown a classical way
 to derive a work optimal PRAM algorithm.  
