@@ -45,6 +45,20 @@ pourchaque 1 < i < n en parallèle
 
    Dans le pire des cas une valeur T[k] va être lue simultanément par n-1 processeurs
 
+3. Arbitrary CW $\rightarrow$ process lisent T[k], $1 \leq k \lt$  
+   T[k] avec une autre valeur $\rightarrow$ T[1]  
+   **Exemple :** 2 < 1 $\rightarrow$ T[k] < T[1] $\rightarrow$ FALSE  
+   False dans m[k], en parallèle, on veut la meme valeur FALSE donc arbitrary  PRAM est suffisante en CW
+
+   Ce que Quentin à noté :  
+   L'algorithme proposé doit permettre CR car on doit lire la même valeur par plusieurs processeurs, dans le but d'exécuter une autre boucle en O(1) :
+
+   ```txt
+   T[i] < T[j] // dans la seconde boucle
+   ```
+
+   Pendant cette instruction nous avons n processeurs qui lisent la même valeur de la cellule du tableau
+
 ## Exercice 2
 
 1. What does the following algorithm applied to a chained linked list of elements compute?
