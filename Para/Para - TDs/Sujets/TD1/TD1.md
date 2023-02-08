@@ -82,6 +82,19 @@ pourchaque 1 < i < n en parallèle
    \end{aligned}
    $$
 
+   Copier la valeur de x dans A[0] vers A[0...7] sur une EREW PRAM
+
+   ![diagramme question 4](question4.drawio.png)
+
+   **Algo**  
+   $n = 2^m$, $A$ de taille $n$, $A[0]$ contient $x$ à copier dans chaque $A[i]$  
+
+   ```py
+   for i = 0 to m-1 do
+      for j = 0 to 2^i-1 do in parallel
+         A[j + 2^i] = A[j]
+   ```
+
 ## Exercice 3
 
 ![algorithme](image-001.png)
