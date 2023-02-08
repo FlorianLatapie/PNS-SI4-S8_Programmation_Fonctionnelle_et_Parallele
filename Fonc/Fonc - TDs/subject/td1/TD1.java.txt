@@ -1,0 +1,75 @@
+package fr.uca.progfonc;
+
+public class TD1 {
+    public static <T> int length(Lst<T> l) {
+        return 0;
+    }
+    
+    public static <T> boolean member(T val, Lst<T> l) {
+        return false;
+    }
+    
+    public static <T> Lst<T> append(Lst<T> l1, Lst<T> l2) {
+        return null;
+    }
+    
+    public static int sum(Lst<Integer> l) {
+        return 0;
+    }
+    
+    public static <T> Lst<T> remove(T val, Lst<T> l) {
+        return null;
+    }
+    
+    public static <T> Lst<T> removeAll(T val, Lst<T> l) {
+        return null;
+    }
+    
+    public static Lst<String> fizzbuzz(int a, int b) {
+        return null;
+    }
+    
+    public static <T> Lst<T> fromArray(T[] arr) {
+        return null;
+    }
+    
+    private static <T> Lst<T> fromArray(T[] arr, int i) {
+        return null;
+    }
+    
+    public static <T> Lst<T> reverse(Lst<T> l) {
+        return null;
+    }
+    
+    public static <T extends Comparable<T>> Lst<T> insert(T val, Lst<T> l) {
+        return null;
+    }
+    
+    public static <T extends Comparable<T>> Lst<T> sort(Lst<T> l) {
+        return null;
+    }
+    
+    public static <T> Lst<T> take(int n, Lst<T> l) {
+        return null;
+    }
+    
+    public static <T> int indexOf(T val, Lst<T> l) {
+        return 0;
+    }
+    
+    public static <T> Lst<T> unique(Lst<T> l) {
+        return null;
+    }
+    
+    public static <T, U> boolean has(Lst<Pair<T, U>> l, T k) {
+        return false;
+    }
+    
+    public static <T, U> U get(Lst<Pair<T, U>> l, T k) {
+        return null;
+    }
+    
+    public static <T, U> Lst<Pair<T, U>> set(Lst<Pair<T, U>> l, T k, U v) {
+        return null;
+    }    
+}

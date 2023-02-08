@@ -1,0 +1,215 @@
+package fr.uca.progfonc;
+
+import org.junit.Test;
+import static org.junit.Assert.*;
+import static fr.uca.progfonc.TD1.*;
+
+public class TD1Test {
+    @Test
+    public void testLengthWithEmptyList() {
+        Lst<Object> emptyList = null;
+        assertEquals(0, TD1.length(emptyList));
+    }
+
+    @Test
+    public void testLengthWithNonEmptyList() {
+        Lst<Object> nonEmptyList = new Lst<>(1, new Lst<>(2, new Lst<>(3, null)));
+        assertEquals(3, TD1.length(nonEmptyList));
+    }
+
+    @Test
+    public void testMemberWithValueInList() {
+        Lst<Object> list = new Lst<>(1, new Lst<>(2, new Lst<>(3, null)));
+        assertTrue(TD1.member(2, list));
+    }
+
+    @Test
+    public void testMemberWithValueNotInList() {
+        Lst<Object> list = new Lst<>(1, new Lst<>(2, new Lst<>(3, null)));
+        assertFalse(TD1.member(4, list));
+    }
+
+    @Test
+    public void testAppendWithEmptyLists() {
+        assertEquals(null, TD1.append(null, null));
+    }
+
+    @Test
+    public void testAppendWithNonEmptyLists() {
+        Lst<Object> list1 = new Lst<>(1, new Lst<>(2, null));
+        Lst<Object> list2 = new Lst<>(3, new Lst<>(4, null));
+        Lst<Object> expected = new Lst<>(1, new Lst<>(2, new Lst<>(3, new Lst<>(4, null))));
+        assertEquals(expected, TD1.append(list1, list2));
+    }
+
+    @Test
+    public void testSumWithEmptyList() {
+        assertEquals(0, TD1.sum(null));
+    }
+
+    @Test
+    public void testSumWithNonEmptyList() {
+        Lst<Integer> nonEmptyList = new Lst<>(1, new Lst<>(2, new Lst<>(3, null)));
+        assertEquals(6, TD1.sum(nonEmptyList));
+    }
+
+    @Test
+    public void testRemoveWithValueInList() {
+        Lst<Object> list = new Lst<>(1, new Lst<>(2, new Lst<>(3, null)));
+        Lst<Object> expected = new Lst<>(1, new Lst<>(3, null));
+        assertEquals(expected, TD1.remove(2, list));
+    }
+
+    @Test
+    public void testRemoveWithValueNotInList() {
+        Lst<Object> list = new Lst<>(1, new Lst<>(2, new Lst<>(3, null)));
+        assertEquals(list, TD1.remove(4, list));
+    }
+
+    @Test
+    public void testRemoveAllWithValueInList() {
+        Lst<Object> list = new Lst<>(1, new Lst<>(2, new Lst<>(1, null)));
+        Lst<Object> expected = new Lst<>(2, null);
+        assertEquals(expected, TD1.removeAll(1, list));
+    }
+
+    @Test
+    public void testRemoveAllWithValueNotInList() {
+        Lst<Object> list = new Lst<>(1, new Lst<>(2, new Lst<>(3, null)));
+        assertEquals(list, TD1.remove(4, list));
+    }
+
+    @Test
+    public void testFizzBuzzWithValidInput() {
+        Lst<String> expected = new Lst<>("2",
+                new Lst<>("Fizz", new Lst<>("4", new Lst<>("Buzz", new Lst<>("Fizz", new Lst<>("7",
+                        new Lst<>("8", new Lst<>("Fizz", new Lst<>("Buzz", new Lst<>("11", new Lst<>("Fizz",
+                                new Lst<>("13", new Lst<>("14", new Lst<>("FizzBuzz", new Lst<>("16", new Lst<>("17",
+                                        new Lst<>("Fizz", new Lst<>("19", new Lst<>("Buzz", null)))))))))))))))))));
+        assertEquals(expected, TD1.fizzbuzz(2, 21));
+    }
+
+    @Test
+    public void testFromArrayWithEmptyArray() {
+        Object[] emptyArray = new Object[0];
+        assertEquals(null, TD1.fromArray(emptyArray));
+    }
+
+    @Test
+    public void testFromArrayWithNonEmptyArray() {
+        Object[] nonEmptyArray = new Object[] { 1, 2, 3 };
+        Lst<Object> expected = new Lst<>(1, new Lst<>(2, new Lst<>(3, null)));
+        assertEquals(expected, TD1.fromArray(nonEmptyArray));
+    }
+
+    @Test
+    public void testReverseWithEmptyList() {
+        assertEquals(null, TD1.reverse(null));
+    }
+
+    @Test
+    public void testReverseWithNonEmptyList() {
+        Lst<Integer> lst = new Lst<>(1, new Lst<>(2, new Lst<>(3, null)));
+        Lst<Integer> reversedLst = TD1.reverse(lst);
+        assertEquals(new Lst<>(3, new Lst<>(2, new Lst<>(1, null))), reversedLst);
+    }
+
+    @Test
+    public void testInsertWithEmptyList() {
+        Lst<Integer> insertedLst = TD1.insert(1, null);
+        assertEquals(new Lst<>(1, null), insertedLst);
+    }
+
+    @Test
+    public void testInsertWithNonEmptyList() {
+        Lst<Integer> lst = new Lst<>(1, new Lst<>(2, new Lst<>(4, null)));
+        Lst<Integer> insertedLst = TD1.insert(3, lst);
+        assertEquals(new Lst<>(1, new Lst<>(2, new Lst<>(3, new Lst<>(4, null)))), insertedLst);
+    }
+
+    @Test
+    public void testSortWithEmptyList() {
+        assertEquals(null, TD1.sort(null));
+    }
+
+    @Test
+    public void testSortWithNonEmptyList() {
+        Lst<Integer> lst = new Lst<>(4, new Lst<>(1, new Lst<>(3, null)));
+        Lst<Integer> insertedLst = TD1.sort(lst);
+        assertEquals(new Lst<>(1, new Lst<>(3, new Lst<>(4, null))), insertedLst);
+    }
+
+    // Test indexOf method
+    @Test
+    public void testIndexOf() {
+        // Create a list with three elements
+        Lst<Integer> l = new Lst<>(1, new Lst<>(2, new Lst<>(3, null)));
+
+        // Test indexOf when value is present in list
+        int index = TD1.indexOf(2, l);
+        assertEquals(1, index);
+
+        // Test indexOf when value is not present in list
+        index = TD1.indexOf(4, l);
+        assertEquals(-1, index);
+    }
+
+    // Test take method
+    @Test
+    public void testTake() {
+        // Create a list with five elements
+        Lst<Integer> l = new Lst<>(1, new Lst<>(2, new Lst<>(3, new Lst<>(4, new Lst<>(5, null)))));
+
+        // Test taking first three elements of list
+        Lst<Integer> firstThree = TD1.take(3, l);
+        Lst<Integer> expected = new Lst<>(1, new Lst<>(2, new Lst<>(3, null)));
+        assertEquals(expected, firstThree);
+
+        assertEquals(expected, TD1.take(5, expected));
+
+        // Test taking first zero elements of list
+        Lst<Integer> noElements = TD1.take(0, l);
+        assertNull(noElements);
+    }
+
+    // Test unique method
+    @Test
+    public void testUnique() {
+        // Create a list with four elements, two of which are duplicates
+        Lst<Integer> l = new Lst<>(1, new Lst<>(2, new Lst<>(2, new Lst<>(1, null))));
+
+        // Test getting unique elements from list
+        Lst<Integer> unique = TD1.unique(l);
+        Lst<Integer> expected = new Lst<>(1, new Lst<>(2, null));
+        Lst<Integer> other = new Lst<>(2, new Lst<>(1, null));
+        assertTrue(expected.equals(unique) || other.equals(unique));
+    }
+
+    @Test
+    public void testHas() {
+        Lst<Pair<String, Integer>> l = new Lst<Pair<String, Integer>>(new Pair<>("a", 1),
+                new Lst<>(new Pair<>("b", 2), null));
+        assertTrue(has(l, "a"));
+        assertTrue(has(l, "b"));
+        assertFalse(has(l, "c"));
+    }
+
+    @Test
+    public void testGet() {
+        Lst<Pair<String, Integer>> l = new Lst<Pair<String, Integer>>(new Pair<>("a", 1),
+                new Lst<>(new Pair<>("b", 2), null));
+        assertEquals(1, get(l, "a").intValue());
+        assertEquals(2, get(l, "b").intValue());
+        assertNull(get(l, "c"));
+    }
+
+    @Test
+    public void testSet() {
+        Lst<Pair<String, Integer>> l = new Lst<Pair<String, Integer>>(new Pair<>("a", 1),
+                new Lst<>(new Pair<>("b", 2), null));
+        l = set(l, "a", 3);
+        assertEquals(3, get(l, "a").intValue());
+        l = set(l, "c", 4);
+        assertEquals(4, get(l, "c").intValue());
+    }
+}

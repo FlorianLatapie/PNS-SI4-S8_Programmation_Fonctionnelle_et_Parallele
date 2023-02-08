@@ -1,0 +1,58 @@
+package fr.uca.progfonc;
+
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.*;
+
+public class SupplierStream<T> implements BasicStream<T> {
+    final Supplier<Optional<T>> s;
+
+    public SupplierStream(Supplier<Optional<T>> f) {
+        this.s = f;
+    }
+
+    public void forEach(Consumer<T> action) {
+        Optional<T> o = s.get();
+        while (o.isPresent()) {
+            action.accept(o.get());
+            o = s.get();
+        }
+    }
+
+    @Override
+    public Optional<T> reduce(BinaryOperator<T> accumulator) {
+        Optional<T> r = s.get();
+        if (r.isEmpty()) return r;
+
+        T acc = r.get();
+        Optional<T> o = s.get();
+        while (o.isPresent()) {
+            acc = accumulator.apply(acc, o.get());
+            o = s.get();
+        }
+        return Optional.of(acc);
+    }
+
+    @Override
+    public BasicStream<T> filter(Predicate<T> predicate) {
+        return new SupplierStream<>( () -> {
+            Optional<T> o = s.get();
+            while (o.isPresent() && !predicate.test(o.get())) {
+                o = s.get();
+            }
+            return o;
+        });
+    }
+
+    @Override
+    public BasicStream<T> limit(long maxSize) {
+        AtomicInteger c = new AtomicInteger(0);
+        return new SupplierStream<>(() ->
+                s.get().filter(x -> c.getAndIncrement() < maxSize));
+    }
+
+    @Override
+    public <R> BasicStream<R> map(Function<T, R> mapper) {
+        return new SupplierStream<>(() -> s.get().map(mapper));
+    }
+}

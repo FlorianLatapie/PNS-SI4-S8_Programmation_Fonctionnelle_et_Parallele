@@ -1,0 +1,79 @@
+package fr.uca.progfonc;
+
+public class TD2 {
+    public static<T,R> Lst<R> map(Function<T,R> f, Lst<T> l) {
+        return null;
+    }
+
+    public static Lst<Integer> squares(Lst<Integer> l) {
+        return null;
+    }
+
+    public static Lst<Integer> sizeOfStrings(Lst<String> l) {
+        return null;
+    }
+
+    public static<T> Lst<T> filter(Predicate<T> f, Lst<T> l) {
+        return null;
+    }
+
+    public static Lst<String> lowers(Lst<String> l) {
+        return null;
+    }
+
+    public static<T> int count(Predicate<T> f, Lst<T> l) {
+        return 0;
+    }
+
+    public static int nbPositives(Lst<Integer> l) {
+        return 0;
+    }
+
+    public static<T,R> R reduce(BiFunction<T,R,R> f, Lst<T> l, R init) {
+        return null;
+    }
+
+    public static int sum(Lst<Integer> l) {
+        return 0;
+    }
+
+    public static<T extends Comparable<T>> T min(Lst<T> l) {
+        return null;
+    }
+
+    public static int sumLengthLowers(Lst<String> l) {
+        return 0;
+    }
+
+    public static int sumLength(Lst<String> l) {
+        return 0;
+    }
+
+    public static<T> String repr(Lst<T> l) {
+        return "";
+    }
+
+    public static<T> Lst<T> concat(Lst<Lst<T>> ll) {
+        return null;
+    }
+
+    public static<T> Lst<T> toSet(Lst<T> l) {
+        return null;
+    }
+
+    public static<T> Lst<T> union(Lst<T> s1, Lst<T> s2) {
+        return null;
+    }
+
+    public static<T> Predicate<T> equalsTo(T x) {
+        return null;
+    }
+
+    public static<T extends Comparable<T>> Predicate<T> between(T a, T b) {
+        return null;
+    }
+
+    public static<T> int countOccurence(Lst<T> l, T e) {
+        return 0;
+    }
+}
