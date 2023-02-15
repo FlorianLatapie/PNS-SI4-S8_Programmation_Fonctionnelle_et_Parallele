@@ -197,4 +197,10 @@ for each j from indice 2^m to (2^m+1)-1, j=j+m in parallel do
       if A[k] > max:
          max = A[k]
    A[x] = max
+
+
+// Algo max v2
+for (k = log(2^m/m) - 1; k >= 0; k--):
+    for each j from 2^k to 2^k+1 - 1 in parallel do
+        A[j] = max(A[2j], A[2j+1])
 ```
