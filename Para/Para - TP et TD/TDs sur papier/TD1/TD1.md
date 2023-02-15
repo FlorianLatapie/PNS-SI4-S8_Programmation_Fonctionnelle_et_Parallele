@@ -82,6 +82,50 @@ $$
          A[j + 2^i] = A[j]
    ```
 
+   **Autre réponse pour la question 4**
+   Chaque step qui necessitait une lecture concurrente sur la CR PRAM a été simulé par 1 alg qui "duplique" n fois chaque adresse mémoire à la ligne par n processeurs en un tableau de "n" cases, où chacun lit en exclusif avec ER.
+
+   ![diagramme question 4 v2](question4-2.drawio.png)  
+   $O(log_2 \space n)$
+
+   ```py 
+   n = 2m 
+   for i = 0 to (m-1):
+      for each j = 0 to (2^i)-1 do in parallel:
+         A[j + 2^i] = A[j]
+   ```
+
+   Application de l'algorithme :
+
+   ```py
+   i = 0 -> j = 0 à 0
+      A[1] = A[0]
+   i = 1 -> j = 0 à (2^1)-1 = 0 à 1
+      A[2] = A[0 + 2^1] = A[0]
+      A[3] = A[1 + 2^1] = A[1]
+   i = 2 -> j = 0 à (2^2)-1 = 0 à 3
+      A[4] = A[0 + 2^2] = A[0]
+      A[5] = A[1 + 2^2] = A[1]
+      A[6] = A[2 + 2^2] = A[2]
+      A[7] = A[3 + 2^2] = A[3]
+   ```
+
+   Pour 8 valeurs, on utilise au maximum 4 processeurs = n/2
+
+$$
+\begin{aligned}
+Work &= 4log(2^m)O(1) \\
+&= \frac{2^m}{2}mO(1) \\
+2^{m-1} &= \frac{n}{2} \\
+\end{aligned}
+$$
+
+   l'algorithme n'est pas optimal car le travail est égal à O(n*log(n)) comparé au meilleur algo séquentiel qui est O(n).
+
+5. Plusieurs processeurs peuvent écrire une valeur unique `false` donc CW Arbitrary est suffisant pour le fonctionnement de l'algorithme.  
+Besoin d'un algo de compactage.
+Combien compte l'algo de compactage ? **Question type DS**  
+
 ## Exercice 2
 
 1. What does the following algorithm applied to a chained linked list of elements compute?
