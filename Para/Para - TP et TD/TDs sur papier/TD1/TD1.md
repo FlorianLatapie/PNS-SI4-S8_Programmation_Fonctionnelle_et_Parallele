@@ -172,3 +172,29 @@ while (\exists object i t.q next[i] != NIL) do
 In the algorithm provided for the parallel computation of the maximum (version 2), the course has shown a classical way
 to derive a work optimal PRAM algorithm.  
 Write down, using the pseudo PRAM language, the proposed work optimal algorithm.
+
+$$
+n = 2 ^ m \space \text{m est une puissance de 2}
+$$
+
+$$
+\begin{aligned}
+n &= 2^4 &= 16 \\
+m &= 4 &= 2^2 \\
+\end{aligned}
+$$
+
+$$
+\frac{n}{log(n)} = \frac{2^m}{m} = \text{nb de processerurs et chaque processeur a } log(n) = m \text{ données à traiter}
+$$
+
+```py
+for each j from indice 2^m to (2^m+1)-1, j=j+m in parallel do
+   // ça enrol (2^m)/m processeurs
+   x = j/m
+   variable privée max = A[j]
+   for k = j+1 to (j+m-1) do # en séquentiel
+      if A[k] > max:
+         max = A[k]
+   A[x] = max
+```
