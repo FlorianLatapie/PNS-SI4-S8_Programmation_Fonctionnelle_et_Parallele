@@ -85,7 +85,6 @@ pourchaque 1 < i < n en parallèle
    Copier la valeur de x dans A[0] vers A[0...7] sur une EREW PRAM
 
    ![diagramme question 4](question4.drawio.png)
-   (ici au tour 3 c'est 4 proc et non 2 proc : voir correction)  
    **Algo**  
    $n = 2^m$, $A$ de taille $n$, $A[0]$ contient $x$ à copier dans chaque $A[i]$  
 
