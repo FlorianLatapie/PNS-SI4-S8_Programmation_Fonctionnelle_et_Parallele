@@ -32,7 +32,7 @@ pourchaque 1 < i < n en parallèle
 
 5. Sketch how to do the same for the Arbitrary C.W, on an E.W. PRAM.
 
-### Answers
+### Réponse exercice 1
 
 1. La complexité de l'algorithme est de O(1) car chaque boucle est parallélisée et donc exécutée en un temps constant
    Dans l'algorithme séquentiel, la complexité est en O(n) parce qu'on a besoin de traverser tout le tableau avec un
@@ -88,7 +88,7 @@ $$
    ![diagramme question 4 v2](question4-2.drawio.png)  
    $O(log_2 \space n)$
 
-   ```py 
+   ```py
    n = 2m 
    for i = 0 to (m-1):
       for each j = 0 to (2^i)-1 do in parallel:
@@ -128,17 +128,15 @@ Combien compte l'algo de compactage ? **Question type DS**
 
 ## Exercice 2
 
-1. What does the following algorithm applied to a chained linked list of elements compute?
-   Start with this list once initialized
-   ![linked list](image-000.png)
+1. What does the following algorithm applied to a chained linked list of elements compute?  
+Start with this list once initialized
+![linked list](image-000.png)
 2. What is its parallel time complexity on a PRAM (considering you can use the most powerful PRAM you need) ? Hint : how
    many times is the condition of the while loop executed ?
 3. Which PRAM variant is needed at least, not to increase the parallel time complexity ?  
    Hint: is it possible that 2 processes read data of the same list item at the same PRAM instruction ? (consider an
    instruction, eg, an addition with two operands as being one single instruction, i.e., do not decompose even more one
    such operation, like an addition, into its corresponding assembly code)
-
-## Exercice 3
 
 ![algorithme](image-001.png)
 
@@ -156,6 +154,20 @@ while (\exists object i t.q next[i] != NIL) do
          d[i] = d[i] + d[next[i]]
          next[i] = next[next[i]]
 ```
+
+### Réponse exercice 2
+
+1. L'algorithme calcule la position de chaque noeud par rapport à la fin de la liste
+2. Chaque étape est O(1)
+   Parallel time complexity is O(log(n))  
+   La complexité est O(log(n))
+   Le nombre de processeurs utilisés est O(n)
+   L'algorithme n'est pas "travail optimal" car le travail est O(n*log(n)) comparé au meilleur algo séquentiel qui est O(n).
+   On arrete l'algorithhme quand il ne reste plus de noeud à traiter dans la liste. À chaque itération on réduit la taille de la liste de 1. Donc à la fin on doirt réduit la taille de la liste de n-1 fois, ce qui correspond au nombre d'itérations de la boucle while.
+3. Pour la lecture, on a besoin d'un ER si on est parfaitement cadencé au niveau des instructions. Pour l'écriture, on a aussi besoin d'un EW.  
+   Enfin , le PRAM dont on a besoin est EREW.
+
+## Exercice 3
 
 In the algorithm provided for the parallel computation of the maximum (version 2), the course has shown a classical way
 to derive a work optimal PRAM algorithm.  
