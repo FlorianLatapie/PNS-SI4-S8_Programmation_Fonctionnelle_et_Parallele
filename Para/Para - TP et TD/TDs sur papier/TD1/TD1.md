@@ -59,18 +59,6 @@ pourchaque 1 < i < n en parallèle
 
    Pendant cette instruction nous avons n processeurs qui lisent la même valeur de la cellule du tableau
 
-## Exercice 2
-
-1. What does the following algorithm applied to a chained linked list of elements compute?
-   Start with this list once initialized
-   ![linked list](image-000.png)
-2. What is its parallel time complexity on a PRAM (considering you can use the most powerful PRAM you need) ? Hint : how
-   many times is the condition of the while loop executed ?
-3. Which PRAM variant is needed at least, not to increase the parallel time complexity ?  
-   Hint: is it possible that 2 processes read data of the same list item at the same PRAM instruction ? (consider an
-   instruction, eg, an addition with two operands as being one single instruction, i.e., do not decompose even more one
-   such operation, like an addition, into its corresponding assembly code)
-
 4. Simulation CR de T[k] pour O(n) processeurs  
    1 processeur lit seulment 1 T[k]  
 
@@ -93,6 +81,18 @@ $$
       for j = 0 to 2^i-1 do in parallel
          A[j + 2^i] = A[j]
    ```
+
+## Exercice 2
+
+1. What does the following algorithm applied to a chained linked list of elements compute?
+   Start with this list once initialized
+   ![linked list](image-000.png)
+2. What is its parallel time complexity on a PRAM (considering you can use the most powerful PRAM you need) ? Hint : how
+   many times is the condition of the while loop executed ?
+3. Which PRAM variant is needed at least, not to increase the parallel time complexity ?  
+   Hint: is it possible that 2 processes read data of the same list item at the same PRAM instruction ? (consider an
+   instruction, eg, an addition with two operands as being one single instruction, i.e., do not decompose even more one
+   such operation, like an addition, into its corresponding assembly code)
 
 ## Exercice 3
 
