@@ -74,17 +74,17 @@ pourchaque 1 < i < n en parallèle
 4. Simulation CR de T[k] pour O(n) processeurs  
    1 processeur lit seulment 1 T[k]  
 
-   $$
-   \begin{aligned}
-   A[0] &\rightarrow A[1] et A[2] \\
-   &\space\space\space\space \rightarrow \text{proc 1 duplique A[1] en A[3] et A[4]} \\
-   &\space\space\space\space \rightarrow \text{proc 2 duplique A[2] en A[5] et A[6]} \\
-   \end{aligned}
-   $$
+$$
+\begin{aligned}
+A[0] &\rightarrow A[1] et A[2] \\
+&\space\space\space\space \rightarrow \text{proc 1 duplique A[1] en A[3] et A[4]} \\
+&\space\space\space\space \rightarrow \text{proc 2 duplique A[2] en A[5] et A[6]} \\
+\end{aligned}
+$$
 
    Copier la valeur de x dans A[0] vers A[0...7] sur une EREW PRAM
 
-   ![diagramme question 4](question4.drawio.png)
+   ![diagramme question 4](question4.drawio.png)  
    **Algo**  
    $n = 2^m$, $A$ de taille $n$, $A[0]$ contient $x$ à copier dans chaque $A[i]$  
 
