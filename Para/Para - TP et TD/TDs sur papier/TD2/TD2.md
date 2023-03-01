@@ -1,5 +1,20 @@
 #  TD2, SI4 Parallel programming 2022-2023
 
+- [ TD2, SI4 Parallel programming 2022-2023](#td2-si4-parallel-programming-2022-2023)
+  - [Exercice 1](#exercice-1)
+    - [Parallelism](#parallelism)
+      - [Exercise 1: Find the position of the first occurrence of element X in an unsorted array](#exercise-1-find-the-position-of-the-first-occurrence-of-element-x-in-an-unsorted-array)
+        - [Preliminary steps](#preliminary-steps)
+        - [First PRAM Version (firstOne)](#first-pram-version-firstone)
+        - [Reducing the number of processors](#reducing-the-number-of-processors)
+  - [Réponse Exercice 1](#réponse-exercice-1)
+    - [First PRAM Version (first One)](#first-pram-version-first-one)
+      - [Prelim](#prelim)
+      - [Modif](#modif)
+      - [Final](#final)
+    - [Reducing the number of processors a](#reducing-the-number-of-processors-a)
+  - [Exercice 2](#exercice-2)
+
 ## Exercice 1  
 
 ### Parallelism
@@ -63,11 +78,13 @@ We then excute on C which return the position of the first '1' in C. Using this 
 3. What is the time complexity of this algorithm ?
 4. What could be an optimal value for X (difficult) ?
 
+---
+
 ## Réponse Exercice 1
 
 ### First PRAM Version (first One)
 
-### Prelim
+#### Prelim
 
 1. algo (prelim)
 
@@ -76,9 +93,9 @@ for each i from 1 to n do in parallel
     B[i] = A[i] 
 ```
 
-1. On élimine au fur et à mesure les 1 qui sont situé à droite car il existe un case avec un indice plus petit contenant un 1 donc cette case va se transformer en un 0. Finalement, on obtient un tableau avec un seul 1, celui le plus à gauche
+2. On élimine au fur et à mesure les 1 qui sont situé à droite car il existe un case avec un indice plus petit contenant un 1 donc cette case va se transformer en un 0. Finalement, on obtient un tableau avec un seul 1, celui le plus à gauche
 
-### Modif
+#### Modif
 
 1. algo (modif)
 
@@ -88,7 +105,7 @@ for each i,j, tel que i<j from 1 to n do in parallel
         B[j] = 0
 ```
 
-### Final
+#### Final
 
 1. algo (final)
 
@@ -100,7 +117,41 @@ for each i from 1 to n do in parallel
         /* EW car on l'a prouvé au step préscédent que seul une case de B contient un 1 */
 ```
 
-1. Nous avons besoin de n processeurs pour executer `final`
+2. Nous avons besoin de n processeurs pour executer `final`
+
+### Reducing the number of processors a
+
+1. algo (there-i)
+
+```java
+isOne = 0 
+for each i from 1 to n do in parallel
+    if A[i] == 1:
+        isOne = 1 // on a besoin d'une CW ARBITRARY ou CONSISTENT
+```
+
+2. Notons `k` l'indice dans `C` ou se trouve le 1er `1` cela correspond au sous-tableau de `A` : `A[(k-1) * X + 1]` à `A[k * X]` qui contient le 1er `1`.
+
+3. le temps parallèle reste en O(1) avec ${(\frac{N}{X})}^2$ processeurs CRCW PRAM
+
+4. on a besoin de $X = \sqrt{N}$, on a donc résolu $O((\frac{N}{X})^2) = O(N)$
+
+
+notes importantes :
+
+$$
+Speedup = \frac{t_{seq}}{t_{par}}\\
+$$
+
+$$
+Work = temps \times nombre \ de \ processeurs
+$$
+
+$$
+Efficiency = \frac{W_{seq}}{W}
+$$
+
+---
 
 ## Exercice 2  
 
