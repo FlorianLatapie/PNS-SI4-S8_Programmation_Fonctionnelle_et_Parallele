@@ -15,11 +15,9 @@ pourchaque 1 < i < n en parallèle
       max = t[i] 
 ```
 
-1. Explain why the proposed CRCW PRAM algorithm that is using n^2 processors can indeed compare all needed values
-   together in just one single phase. Remember that to find the maximum of a set of n values, each of them must at some
+1. Explain why the proposed `CRCW PRAM` algorithm that is using $n^2$ processors can indeed compare all needed values together in just one single phase. Remember that to find the maximum of a set of n values, each of them must at some
    point be compared to all the others.  
-   Why in the sequential algorithm that you can easily write down, the time complexity ends up being in O(n) (and not O(
-   n^2)).
+   Why in the sequential algorithm that you can easily write down, the time complexity ends up being in O(n) (and not O(n^2)).
 
 2. Explain why the proposed CRCW PRAM algorithm has to allow CR ?
 

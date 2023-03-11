@@ -2,8 +2,9 @@
 
 ## TDs sur papier
 
-- [TD1](./TDs%20sur%20papier/TD1/TD1.md) + [correction](./TDs%20sur%20papier/TD1/td1-correc-seance1.pdf)
-- [TD2 - sujet](./TDs%20sur%20papier/TD2/td2-complet.pdf)
+- [TD1](./TDs%20sur%20papier/TD1/)
+- [TD2](./TDs%20sur%20papier/TD2/)
+- [TD3](./TDs%20sur%20papier/TD3/)
 
 ## TDs sur machine
 
