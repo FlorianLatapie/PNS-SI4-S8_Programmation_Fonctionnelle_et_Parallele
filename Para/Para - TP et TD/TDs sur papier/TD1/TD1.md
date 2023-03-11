@@ -2,7 +2,7 @@
 
 ## Exercice 1
 
-In the course, we have shown 2 versions of the parallel computation of the maximum of n values.
+In the course, we have shown 2 versions of the **parallel computation of the maximum of `n` values**.
 
 ```txt
 pourchaque 1 < i < n en parallèle 
@@ -15,26 +15,41 @@ pourchaque 1 < i < n en parallèle
       max = t[i] 
 ```
 
-1. Explain why the proposed `CRCW PRAM` algorithm that is using $n^2$ processors can indeed compare all needed values together in just one single phase. Remember that to find the maximum of a set of n values, each of them must at some
-   point be compared to all the others.  
-   Why in the sequential algorithm that you can easily write down, the time complexity ends up being in O(n) (and not O(n^2)).
+1. Explain why the proposed `CRCW PRAM` algorithm that is using $n^2$ processors can indeed compare all needed values together in just one single phase.
+   Remember that to find the maximum of a set of n values, each of them must at some point be compared to all the others.  
+   Why in the sequential algorithm that you can easily write down, the time complexity ends up being in $O(n)$ (and not $O(n^2)$).
 
-2. Explain why the proposed CRCW PRAM algorithm has to allow CR ?
+2. Explain why the proposed `CRCW PRAM` algorithm has to allow `CR` ?
 
-3. Explain why the proposed CRCW PRAM algorithm has to allow Arbitrary CW ?
+3. Explain why the proposed `CRCW PRAM` algorithm has to allow `Arbitrary CW` ?
 
-4. Sketch how to simulate a C.R. of this algorithm, on an E.R PRAM. For the C.R simulation, write down the complete
-   algorithm, assuming the value to be copied to the n processors, is stored in an array of size n, at index 0. Assume
-   that n=2^m, so, you can iterate in O(m) parallel steps. Highlight why the simulation has only O(log n) parallel time
-   complexity, given the number of data is n.
+4. Sketch how to simulate a `CR` of this algorithm, on an `ER` `PRAM`.
+   For the `CR` simulation, write down the complete algorithm, assuming the value to be copied to the `n` processors, is stored in an array of size `n`, at index `0`.  
+   Assume that $n=2^m$, so, you can iterate in $O(m)$ parallel steps. Highlight why the simulation has only $O(log(n))$ parallel time complexity, given the number of data is n.
 
-5. Sketch how to do the same for the Arbitrary C.W, on an E.W. PRAM.
+5. Sketch how to do the same for the Arbitrary `CW`, on an `EW` `PRAM`.
 
 ### Réponse exercice 1
 
-1. La complexité de l'algorithme est de O(1) car chaque boucle est parallélisée et donc exécutée en un temps constant
-   Dans l'algorithme séquentiel, la complexité est en O(n) parce qu'on a besoin de traverser tout le tableau avec un
+1. La complexité de l'algorithme est de $O(1)$ car chaque boucle est parallélisée et donc exécutée en un temps constant
+   Dans l'algorithme séquentiel, la complexité est en $O(n)$ parce qu'on a besoin de traverser tout le tableau avec un
    accumulateur stockant le maximum. À la fin, la valeur correspond au maximum du tableau.
+
+   **Depuis le pdf de corrrection de la prof :**
+
+   Explication de l'algorithme :
+   pour chaque valeur du tableau en paralèle, on vient la comparer à toutes les autres, seules les valeurs ne sont pas plus petites ne sont pas notées false, il ne reste plus qu'à trouver la valeur true qui est par définition la plus grande.
+
+   Une approche "brute force" en séquentiel peut être utilisée pour avoir un algo en $O(n)$ :
+
+   ```txt
+   max = -inf
+   pour chaque valeur du tableau en séquentiel
+      si (t[i] > max)
+         max = t[i]
+   ```
+
+   À la fin max contient la valeur maximale du tableau
 
 2. ```txt
    i = 3 j = 4 // 1 proc T[3] T[4]   
@@ -43,8 +58,7 @@ pourchaque 1 < i < n en parallèle
 
    Dans le pire des cas une valeur T[k] va être lue simultanément par n-1 processeurs
 
-3. Arbitrary CW $\rightarrow$ process lisent T[k], $1 \leq k \lt$  
-   T[k] avec une autre valeur $\rightarrow$ T[1]  
+3. Arbitrary CW $\rightarrow$ process lisent T[k], $1 \leq k \lt$ T[k] avec une autre valeur $\rightarrow$ T[1]  
    **Exemple :** 2 < 1 $\rightarrow$ T[k] < T[1] $\rightarrow$ FALSE  
    False dans m[k], en parallèle, on veut la meme valeur FALSE donc arbitrary  PRAM est suffisante en CW
 
@@ -57,7 +71,11 @@ pourchaque 1 < i < n en parallèle
 
    Pendant cette instruction nous avons n processeurs qui lisent la même valeur de la cellule du tableau
 
-4. Simulation CR de T[k] pour O(n) processeurs  
+   **Depuis le pdf de corrrection de la prof :**
+
+   On peux CW car soit on n'écrit rien soit on met false dans la case correspondante à la valeur du tableau, donc on peut écrire en parallèle.
+
+4. Simulation `CR` de T[k] pour $O(n)$ processeurs  
    1 processeur lit seulment 1 T[k]  
 
 $$
@@ -126,16 +144,6 @@ Combien compte l'algo de compactage ? **Question type DS**
 
 ## Exercice 2
 
-1. What does the following algorithm applied to a chained linked list of elements compute?  
-Start with this list once initialized
-![linked list](image-000.png)
-2. What is its parallel time complexity on a PRAM (considering you can use the most powerful PRAM you need) ? Hint : how
-   many times is the condition of the while loop executed ?
-3. Which PRAM variant is needed at least, not to increase the parallel time complexity ?  
-   Hint: is it possible that 2 processes read data of the same list item at the same PRAM instruction ? (consider an
-   instruction, eg, an addition with two operands as being one single instruction, i.e., do not decompose even more one
-   such operation, like an addition, into its corresponding assembly code)
-
 ![algorithme](image-001.png)
 
 ```py
@@ -153,14 +161,25 @@ while (\exists object i t.q next[i] != NIL) do
          next[i] = next[next[i]]
 ```
 
+1. What does the following algorithm applied to a chained linked list of elements compute?  
+Start with this list once initialized  
+![linked list](image-000.png)
+2. What is its parallel time complexity on a PRAM (considering you can use the most powerful PRAM you need) ?  
+   Hint : how
+   many times is the condition of the while loop executed ?
+3. Which PRAM variant is needed at least, not to increase the parallel time complexity ?  
+   Hint: is it possible that 2 processes read data of the same list item at the same PRAM instruction ? (consider an
+   instruction, eg, an addition with two operands as being one single instruction, i.e., do not decompose even more one
+   such operation, like an addition, into its corresponding assembly code)
+
 ### Réponse exercice 2
 
 1. L'algorithme calcule la position de chaque noeud par rapport à la fin de la liste
-2. Chaque étape est O(1)
-   Parallel time complexity is O(log(n))  
-   La complexité est O(log(n))
-   Le nombre de processeurs utilisés est O(n)
-   L'algorithme n'est pas "travail optimal" car le travail est O(n*log(n)) comparé au meilleur algo séquentiel qui est O(n).
+2. Chaque étape est $O(1)$
+   Parallel time complexity is $O(log(n))$  
+   La complexité est $O(log(n))$
+   Le nombre de processeurs utilisés est $O(n)$
+   L'algorithme n'est pas "travail optimal" car le travail est $O(n \times log(n))$ comparé au meilleur algo séquentiel qui est $O(n)$.
    On arrete l'algorithhme quand il ne reste plus de noeud à traiter dans la liste. À chaque itération on réduit la taille de la liste de 1. Donc à la fin on doirt réduit la taille de la liste de n-1 fois, ce qui correspond au nombre d'itérations de la boucle while.
 3. Pour la lecture, on a besoin d'un ER si on est parfaitement cadencé au niveau des instructions. Pour l'écriture, on a aussi besoin d'un EW.  
    Enfin , le PRAM dont on a besoin est EREW.
@@ -170,6 +189,8 @@ while (\exists object i t.q next[i] != NIL) do
 In the algorithm provided for the parallel computation of the maximum (version 2), the course has shown a classical way
 to derive a work optimal PRAM algorithm.  
 Write down, using the pseudo PRAM language, the proposed work optimal algorithm.
+
+### Réponse exercice 3
 
 $$
 n = 2 ^ m \space \text{m est une puissance de 2}
