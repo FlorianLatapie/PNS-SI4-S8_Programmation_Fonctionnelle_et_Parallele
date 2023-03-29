@@ -4,7 +4,7 @@ from CPU_version import scanCPU
 from GPU_version import scanGPU
 from dumb_CPU_version import scanDumb
 
-# random np array values for testing
+# random np array values for testing 
 
 for i in range(0, 100):
     my_input = np.random.randint(low=0, high=100, size=8, dtype=np.int32)
