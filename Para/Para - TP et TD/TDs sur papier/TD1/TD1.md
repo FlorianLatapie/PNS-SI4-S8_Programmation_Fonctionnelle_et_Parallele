@@ -93,8 +93,9 @@ $$
    $n = 2^m$, $A$ de taille $n$, $A[0]$ contient $x$ à copier dans chaque $A[i]$  
 
    ```py
-   for i = 0 to m-1 do
-      for j = 0 to 2^i-1 do in parallel
+   n = 2m 
+   for i = 0 to (m-1):
+      for each j = 0 to (2^i)-1 do in parallel:
          A[j + 2^i] = A[j]
    ```
 
@@ -103,13 +104,6 @@ $$
 
    ![diagramme question 4 v2](question4-2.drawio.png)  
    $O(log_2 \space n)$
-
-   ```py
-   n = 2m 
-   for i = 0 to (m-1):
-      for each j = 0 to (2^i)-1 do in parallel:
-         A[j + 2^i] = A[j]
-   ```
 
    Application de l'algorithme :
 
@@ -175,12 +169,11 @@ Start with this list once initialized
 ### Réponse exercice 2
 
 1. L'algorithme calcule la position de chaque noeud par rapport à la fin de la liste
-2. Chaque étape est $O(1)$
-   Parallel time complexity is $O(log(n))$  
-   La complexité est $O(log(n))$
-   Le nombre de processeurs utilisés est $O(n)$
-   L'algorithme n'est pas "travail optimal" car le travail est $O(n \times log(n))$ comparé au meilleur algo séquentiel qui est $O(n)$.
-   On arrete l'algorithhme quand il ne reste plus de noeud à traiter dans la liste. À chaque itération on réduit la taille de la liste de 1. Donc à la fin on doirt réduit la taille de la liste de n-1 fois, ce qui correspond au nombre d'itérations de la boucle while.
+2. Chaque étape est $O(1)$  
+   La complexité est $O(log(n))$  
+   Le nombre de processeurs utilisés est $O(n)$  
+   L'algorithme n'est pas "travail optimal" car le travail est $O(n \times log(n))$ comparé au meilleur algo séquentiel qui est $O(n)$.  
+   On arrête l'algorithhme quand il ne reste plus de noeud à traiter dans la liste. À chaque itération on réduit la taille de la liste de 1. Donc à la fin on doirt réduit la taille de la liste de n-1 fois, ce qui correspond au nombre d'itérations de la boucle while.
 3. Pour la lecture, on a besoin d'un ER si on est parfaitement cadencé au niveau des instructions. Pour l'écriture, on a aussi besoin d'un EW.  
    Enfin , le PRAM dont on a besoin est EREW.
 
