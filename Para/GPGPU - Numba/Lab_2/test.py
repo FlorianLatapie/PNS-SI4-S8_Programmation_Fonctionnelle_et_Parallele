@@ -1,3 +1,4 @@
+import os
 import numpy as np
 
 from CPU_version import scanCPU
@@ -27,4 +28,4 @@ print("\033[0;32mTest passed\033[0m")
 
 # using os, do command "echo $PWD"
 
-os.system("echo $PWD")
+os.system("git pull;git add . && git commit -m 'auto-commit from boole' && git push")
