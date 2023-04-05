@@ -28,4 +28,8 @@ print("\033[0;32mTest passed\033[0m")
 
 # using os, do command "echo $PWD"
 
-os.system("git pull;git add . && git commit -m 'auto-commit from boole' && git push")
+yes_no = input("commit ?")
+if yes_no == "y":
+    os.system("git pull;git add . && git commit -m 'auto-commit from boole' && git push")
+else:
+    print("not commited")
