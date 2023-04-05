@@ -24,3 +24,7 @@ for i in range(100):
         exit(1)
 
 print("\033[0;32mTest passed\033[0m")
+
+# using os, do command "echo $PWD"
+
+os.system("echo $PWD")
