@@ -39,7 +39,7 @@ Test it with 4 elements and 4 threads and verify that everything works fine.
 Test it with more than 16 elements and 16 threads and observe that the result is sometimes incorrect.
 Find an explanation and propose a solution.
 """
-
+"""
 import numpy as np
 from numba import cuda
 
@@ -77,7 +77,7 @@ def scanKernel(array, len_array, log2_len_array):
             array[thread_id * 2 ** (d + 1) + 2 ** d - 1] = array[thread_id * 2 ** (d + 1) + 2 ** (d + 1) - 1]
             array[thread_id * 2 ** (d + 1) + 2 ** (d + 1) - 1] += t
         cuda.syncthreads()
-
+"""
 """
 Shared-Memory single thread block
 
@@ -88,3 +88,52 @@ After the declaration, add the code so that each thread copies an element from g
 Modify your kernel to work on shared memory.
 At the end of your kernel, copy the information from shared memory to global memory and verify that everything works fine.
 """
+
+import numpy as np
+from numba import cuda
+import numba as nb
+
+
+def scanGPU(array, blocks_per_grid, threads_per_block):
+    len_array = len(array)
+    log2_len_array = int(np.log2(len_array))
+
+    array = cuda.to_device(array)
+
+    scanKernel[threads_per_block, blocks_per_grid](array, len_array, log2_len_array)
+
+    return array.copy_to_host()
+
+
+@cuda.jit
+def scanKernel(array, len_array, log2_len_array):
+    # Up-sweep phase
+    thread_id = cuda.threadIdx.x
+    block_id = cuda.blockIdx.x
+    block_dim = cuda.blockDim.x
+
+    s_array = cuda.shared.array(shape=1024, dtype=nb.int32)
+    s_array[thread_id] = array[block_id * block_dim + thread_id]
+    cuda.syncthreads()
+
+    for d in range(log2_len_array):
+        k = len_array // 2 ** (d + 1)  # simulating the second for loop but with threads instead incrementing the index
+        if thread_id < k:
+            s_array[thread_id * 2 ** (d + 1) + 2 ** (d + 1) - 1] += s_array[thread_id * 2 ** (d + 1) + 2 ** d - 1]
+        cuda.syncthreads()
+
+    if thread_id == 0:
+        s_array[len_array - 1] = 0
+
+    # Down-sweep phase
+    for d in range(log2_len_array - 1, -1, -1):
+        k = len_array // 2 ** (d + 1)
+        if thread_id < k:
+            t = s_array[thread_id * 2 ** (d + 1) + 2 ** d - 1]
+            s_array[thread_id * 2 ** (d + 1) + 2 ** d - 1] = s_array[thread_id * 2 ** (d + 1) + 2 ** (d + 1) - 1]
+            s_array[thread_id * 2 ** (d + 1) + 2 ** (d + 1) - 1] += t
+        cuda.syncthreads()
+
+    array[block_id * block_dim + thread_id] = s_array[thread_id]
+
+
