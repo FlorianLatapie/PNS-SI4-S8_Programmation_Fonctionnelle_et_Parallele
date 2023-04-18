@@ -15,7 +15,7 @@ for i in range(100):
     expected_output = scanDumb(my_input_for_expected)
     
     #actual_output = scanCPU(my_input_for_actual)
-    actual_output = scanGPU(my_input_for_actual,len(my_input_for_actual),1)
+    actual_output = scanGPU(my_input_for_actual,len(my_input_for_actual),10)
     
     if not np.array_equal(expected_output, actual_output):
         print("\033[0;31mTest failed\033[0m")

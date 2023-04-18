@@ -100,13 +100,13 @@ def scanGPU(array, blocks_per_grid, threads_per_block):
 
     array = cuda.to_device(array)
 
-    scanKernel[threads_per_block, blocks_per_grid](array, len_array, log2_len_array)
+    scanKernel[threads_per_block, blocks_per_grid](array, len_array, log2_len_array, threads_per_block)
 
     return array.copy_to_host()
 
 
 @cuda.jit
-def scanKernel(array, len_array, log2_len_array):
+def scanKernel(array, len_array, log2_len_array, threads_per_block):
     # Up-sweep phase
     thread_id = cuda.grid(1)
 
@@ -123,6 +123,8 @@ def scanKernel(array, len_array, log2_len_array):
     if thread_id == 0:
         s_array[len_array - 1] = 0
 
+    cuda.syncthreads()
+
     # Down-sweep phase
     for d in range(log2_len_array - 1, -1, -1):
         k = len_array // 2 ** (d + 1)
@@ -133,5 +135,7 @@ def scanKernel(array, len_array, log2_len_array):
         cuda.syncthreads()
 
     array[thread_id] = s_array[thread_id]
+    cuda.syncthreads()
+
 
 
