@@ -119,6 +119,8 @@ def scanKernel(array, len_array, log2_len_array, threads_per_block):
         if thread_id < k:
             s_array[thread_id * 2 ** (d + 1) + 2 ** (d + 1) - 1] += s_array[thread_id * 2 ** (d + 1) + 2 ** d - 1]
         cuda.syncthreads()
+    cuda.syncthreads()
+
 
     if thread_id == 0:
         s_array[len_array - 1] = 0
@@ -133,6 +135,7 @@ def scanKernel(array, len_array, log2_len_array, threads_per_block):
             s_array[thread_id * 2 ** (d + 1) + 2 ** d - 1] = s_array[thread_id * 2 ** (d + 1) + 2 ** (d + 1) - 1]
             s_array[thread_id * 2 ** (d + 1) + 2 ** (d + 1) - 1] += t
         cuda.syncthreads()
+    cuda.syncthreads()
 
     array[thread_id] = s_array[thread_id]
     cuda.syncthreads()
