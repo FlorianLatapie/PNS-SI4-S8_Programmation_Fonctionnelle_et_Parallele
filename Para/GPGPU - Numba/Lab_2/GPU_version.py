@@ -26,7 +26,7 @@ def scanCPU(array):
 Single thread block GPU version
 Firstly, we will consider an array that can be processed by a single thread block. Therefore, its size should be at most 1024 elements.
 
-The GPU version is obtained by starting from the CPU version written previously and identifying which parts can be executed in parallel and therefore by multiple threads. 
+The GPU version is obtained by starting from the CPU version written previously and identifying which parts can be executed in parallel and therefore by multiple threads.
 
 In the up-sweep and down-sweep phases, which parts can be executed in parallel?
 Write a host function scanGPU(array) that copies the array to the device and prepares the call to the kernel that you will develop.
@@ -53,31 +53,31 @@ def scanGPU(array, blocks_per_grid, threads_per_block):
     log2_len_array = int(np.log2(len_array))
 
     array = cuda.to_device(array)
-    
+
     scanKernel[threads_per_block, blocks_per_grid](array, len_array, log2_len_array)
-    
+
     return array.copy_to_host()
-    
+
+
 @cuda.jit
-def scanKernel(array, n, m):
+def scanKernel(array, len_array, log2_len_array):
     # Up-sweep phase
     thread_id = cuda.grid(1)
-    x = thread_id
 
-    for d in range(0, m):
-        k = n // 2**(d + 1) # simulating the second for loop but with threads instead incrementing the index
-        if x < k:
-            array[x * 2**(d + 1) + 2**(d + 1) - 1] += array[x * 2**(d + 1) + 2**d - 1]
+    for d in range(log2_len_array):
+        k = len_array // 2 ** (d + 1)  # simulating the second for loop but with threads instead incrementing the index
+        if thread_id < k:
+            array[thread_id * 2 ** (d + 1) + 2 ** (d + 1) - 1] += array[thread_id * 2 ** (d + 1) + 2 ** d - 1]
         cuda.syncthreads()
 
     if thread_id == 0:
-        array[n - 1] = 0
+        array[len_array - 1] = 0
 
     # Down-sweep phase
-    for d in range(m - 1, -1, -1):
-        k = n // 2**(d + 1)
-        if x < k:
-            t = array[x * 2**(d + 1) + 2**d - 1]
-            array[x * 2**(d + 1) + 2**d - 1] = array[x * 2**(d + 1) + 2**(d + 1) - 1]
-            array[x * 2**(d + 1) + 2**(d + 1) - 1] += t
+    for d in range(log2_len_array - 1, -1, -1):
+        k = len_array // 2 ** (d + 1)
+        if thread_id < k:
+            t = array[thread_id * 2 ** (d + 1) + 2 ** d - 1]
+            array[thread_id * 2 ** (d + 1) + 2 ** d - 1] = array[thread_id * 2 ** (d + 1) + 2 ** (d + 1) - 1]
+            array[thread_id * 2 ** (d + 1) + 2 ** (d + 1) - 1] += t
         cuda.syncthreads()
