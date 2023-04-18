@@ -47,6 +47,7 @@ import math
 import numpy as np
 from numba import cuda
 
+
 def scanGPU(array, blocks_per_grid, threads_per_block):
     len_array = len(array)
     log2_len_array = int(np.log2(len_array))
@@ -80,6 +81,3 @@ def scanKernel(array, n, m):
             array[x * 2**(d + 1) + 2**d - 1] = array[x * 2**(d + 1) + 2**(d + 1) - 1]
             array[x * 2**(d + 1) + 2**(d + 1) - 1] += t
         cuda.syncthreads()
-
-
-
