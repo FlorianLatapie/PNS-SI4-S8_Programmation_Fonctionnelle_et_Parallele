@@ -1,7 +1,8 @@
 """
 CPU version
 Write a function scanCPU(array) that takes a numpy array of int32 values of size n=2^m as a parameter and performs the up-sweep and down-sweep phases to compute the exclusive prefix. Make sure to verify each step of the calculation by printing the array.
-
+"""
+"""
 import numpy as np
 
 def scanCPU(array):
@@ -22,7 +23,8 @@ def scanCPU(array):
             array[k + 2 ** (d + 1) - 1] += tmp
 
     return array
-
+"""
+"""
 Single thread block GPU version
 Firstly, we will consider an array that can be processed by a single thread block. Therefore, its size should be at most 1024 elements.
 
@@ -37,12 +39,6 @@ Test it with 4 elements and 4 threads and verify that everything works fine.
 Test it with more than 16 elements and 16 threads and observe that the result is sometimes incorrect.
 Find an explanation and propose a solution.
 """
-
-from numba import cuda
-import numba as nb
-import numpy as np
-import sys
-import math
 
 import numpy as np
 from numba import cuda
@@ -81,3 +77,14 @@ def scanKernel(array, len_array, log2_len_array):
             array[thread_id * 2 ** (d + 1) + 2 ** d - 1] = array[thread_id * 2 ** (d + 1) + 2 ** (d + 1) - 1]
             array[thread_id * 2 ** (d + 1) + 2 ** (d + 1) - 1] += t
         cuda.syncthreads()
+
+"""
+Shared-Memory single thread block
+
+By default, a kernel uses global memory which is the slowest. We will modify our kernel to use shared memory. The size is limited but sufficient to load the array processed by our thread block.
+
+Declare a shared array of size equal to the number of threads in the block and containing int32 dtype values at the beginning of your kernel.
+After the declaration, add the code so that each thread copies an element from global memory to the shared array.
+Modify your kernel to work on shared memory.
+At the end of your kernel, copy the information from shared memory to global memory and verify that everything works fine.
+"""
