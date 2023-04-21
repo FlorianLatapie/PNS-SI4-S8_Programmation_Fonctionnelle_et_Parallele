@@ -96,13 +96,15 @@ import numba as nb
 
 def scanGPU(array, blocks_per_grid, threads_per_block):
     len_array = len(array)
-    log2_len_array = int(np.log2(len_array))
+    log2_len_array = int(np.ceil(np.log2(len_array)))
+    full_len = 2 ** log2_len_array
+    array = np.lib.pad(array, (0, full_len - len_array), 'maximum')
 
     array = cuda.to_device(array)
 
-    scanKernel[threads_per_block, blocks_per_grid](array, len_array, log2_len_array)
+    scanKernel[threads_per_block, blocks_per_grid](array, full_len, log2_len_array)
 
-    return array.copy_to_host()
+    return array.copy_to_host()[0:len_array]
 
 
 @cuda.jit
@@ -114,6 +116,7 @@ def scanKernel(array, len_array, log2_len_array):
     s_array = cuda.shared.array(shape=256, dtype=nb.int32)
     s_array[thread_id] = array[thread_id]
     cuda.syncthreads()
+
 
     for d in range(log2_len_array):
         k = len_array // 2 ** (d + 1)  # simulating the second for loop but with threads instead incrementing the index
