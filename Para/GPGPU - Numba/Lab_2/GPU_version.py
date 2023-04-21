@@ -111,7 +111,7 @@ def scanKernel(array, len_array, log2_len_array):
     cuda.syncthreads()
     thread_id = cuda.threadIdx.x
 
-    s_array = cuda.shared.array(256, dtype=nb.int32)
+    s_array = cuda.shared.array(shape=256, dtype=nb.int32)
     s_array[thread_id] = array[thread_id]
     cuda.syncthreads()
 
