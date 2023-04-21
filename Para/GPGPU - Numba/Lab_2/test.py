@@ -5,6 +5,8 @@ from CPU_version import scanCPU
 from GPU_version import scanGPU
 from dumb_CPU_version import scanDumb
 
+from lol_version import scanGPU as lol_scanGPU
+
 for i in range(100):
     #my_input = np.array([2, 3, 4, 6], dtype=np.int32)
     my_input = np.random.randint(low=0, high=100, size=16, dtype=np.int32)
@@ -15,7 +17,8 @@ for i in range(100):
     expected_output = scanDumb(my_input_for_expected)
     
     #actual_output = scanCPU(my_input_for_actual)
-    actual_output = scanGPU(my_input_for_actual,len(my_input_for_actual),80)
+    actual_output = scanGPU(my_input_for_actual,len(my_input_for_actual),1)
+    #actual_output = lol_scanGPU(my_input_for_actual,256,1)
     
     if not np.array_equal(expected_output, actual_output):
         print("\033[0;31mTest failed\033[0m")
@@ -23,6 +26,9 @@ for i in range(100):
         print("expected output: " + str(expected_output))
         print("output:          " + str(actual_output))
         exit(1)
+    else:
+        print("\033[0;32mok",i,"\033[0m")
+
 
 print("\033[0;32mTest passed\033[0m")
 
