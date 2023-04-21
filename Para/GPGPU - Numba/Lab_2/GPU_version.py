@@ -182,4 +182,7 @@ if __name__ == "__main__":
     if args.inclusive:
         array = np.insert(array, 0, 0)
 
-    print(scanGPU(array, blocks_per_grid, threads_per_block))
+    # print ints sep by coma
+
+    res = scanGPU(array, blocks_per_grid, threads_per_block)
+    print(','.join(map(str, res)))
