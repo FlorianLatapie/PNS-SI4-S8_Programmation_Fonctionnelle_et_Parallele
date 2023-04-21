@@ -146,3 +146,40 @@ def scanKernel(array, len_array, log2_len_array):
 
 
 
+"""
+     python project-gpu.py <inputFile> [--tb int] [--independent] [--inclusive]
+with
+ inputFile :  single-line text file containing the list of values, separated by commas. 
+--tb int : optional size of a thread block
+--independent : perform independent scans on sub-arrays
+--inclusive : perform an inclusive scan 
+"""
+
+if __name__ == "__main__":
+    import sys
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("inputFile", help="single-line text file containing the list of values, separated by commas")
+    parser.add_argument("--tb", help="optional size of a thread block", type=int)
+    parser.add_argument("--independent", help="perform independent scans on sub-arrays", action="store_true")
+    parser.add_argument("--inclusive", help="perform an inclusive scan", action="store_true")
+    args = parser.parse_args()
+
+    with open(args.inputFile) as f:
+        array = np.array([int(x) for x in f.readline().split(',')])
+
+    if args.tb:
+        threads_per_block = args.tb
+    else:
+        threads_per_block = 256
+
+    if args.independent:
+        blocks_per_grid = int(np.ceil(len(array) / threads_per_block))
+    else:
+        blocks_per_grid = 1
+
+    if args.inclusive:
+        array = np.insert(array, 0, 0)
+
+    print(scanGPU(array, blocks_per_grid, threads_per_block))

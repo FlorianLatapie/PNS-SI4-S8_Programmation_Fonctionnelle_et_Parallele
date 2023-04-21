@@ -11,7 +11,7 @@ for i in range(100):
     #my_input = np.array([2, 3, 4, 6], dtype=np.int32)
     # random 0-10 
     array_length = np.random.randint(low=1, high=100, size=1, dtype=np.int32)[0]
-    my_input = np.random.randint(low=0, high=100, size=array_length, dtype=np.int32)
+    my_input = np.random.randint(low=-100, high=100, size=array_length, dtype=np.int32)
     my_input_copy = my_input.copy()
     my_input_for_expected = my_input.copy()
     my_input_for_actual = my_input.copy()
