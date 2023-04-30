@@ -2,10 +2,8 @@ import os
 import numpy as np
 
 from CPU_version import scanCPU
-from GPU_version import scanGPU
+from project_gpu import scanGPU
 from dumb_CPU_version import scanDumb
-
-from lol_version import scanGPU as lol_scanGPU
 
 for i in range(100):
     #my_input = np.array([2, 3, 4, 6], dtype=np.int32)
