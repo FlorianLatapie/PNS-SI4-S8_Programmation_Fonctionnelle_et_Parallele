@@ -113,6 +113,7 @@ def scanKernel(array, len_array, log2_len_array):
     cuda.syncthreads()
     thread_id = cuda.threadIdx.x
 
+    # using a shared array
     s_array = cuda.shared.array(shape=256, dtype=nb.int32)
     s_array[thread_id] = array[thread_id]
     cuda.syncthreads()
@@ -124,7 +125,6 @@ def scanKernel(array, len_array, log2_len_array):
             s_array[thread_id * 2 ** (d + 1) + 2 ** (d + 1) - 1] += s_array[thread_id * 2 ** (d + 1) + 2 ** d - 1]
         cuda.syncthreads()
     cuda.syncthreads()
-
 
     if thread_id == 0:
         s_array[len_array - 1] = 0
@@ -183,8 +183,6 @@ if __name__ == "__main__":
         input_array = np.append(input_array, 0)
         res_array = scan_gpu(input_array, args.independent)
         res_array = res_array[1:]
-
-    # print ints sep by coma
 
     res = scanGPU(array, blocks_per_grid, threads_per_block)
     print(','.join(map(str, res)))
