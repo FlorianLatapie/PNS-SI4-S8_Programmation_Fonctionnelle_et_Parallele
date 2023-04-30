@@ -180,7 +180,9 @@ if __name__ == "__main__":
         blocks_per_grid = 1
 
     if args.inclusive:
-        array = np.insert(array, 0, 0)
+        input_array = np.append(input_array, 0)
+        res_array = scan_gpu(input_array, args.independent)
+        res_array = res_array[1:]
 
     # print ints sep by coma
 
