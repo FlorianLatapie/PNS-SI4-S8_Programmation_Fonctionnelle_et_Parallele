@@ -172,7 +172,8 @@ if __name__ == "__main__":
     if args.tb:
         threads_per_block = args.tb
     else:
-        threads_per_block = 256
+        threads_per_block = 1024
+
 
     if args.independent:
         blocks_per_grid = int(np.ceil(len(array) / threads_per_block))
