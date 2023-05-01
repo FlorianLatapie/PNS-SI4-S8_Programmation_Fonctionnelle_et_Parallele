@@ -100,9 +100,7 @@ if __name__ == "__main__":
         blocks_per_grid = 1
 
     if args.inclusive:
-        input_array = np.append(input_array, 0)
-        res_array = scan_gpu(input_array, args.independent)
-        res_array = res_array[1:]
+        array = np.insert(array, 0, 0)
 
-    res = scanGPU(array, THREAD_PER_BLOCK)
-    print(','.join(map(str, res)), end='')
+    res = scanGPU(array)
+    print(','.join(map(str, res)))
