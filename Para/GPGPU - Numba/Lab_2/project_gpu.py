@@ -96,7 +96,6 @@ import math
 
 THREAD_PER_BLOCK = 1024
 
-
 def scanGPU(array, threads_per_block):
     len_array = len(array)
     log2_len_array = int(math.ceil(math.log2(threads_per_block)))
@@ -126,6 +125,8 @@ def scanGPU(array, threads_per_block):
 
 @cuda.jit
 def scanKernel(d_array, sum_array, len_array, log2_len_array):
+    #THREAD_PER_BLOCK = cuda.blockDim.x
+    threads_per_block = THREAD_PER_BLOCK
     # Up-sweep phase
     cuda.syncthreads()
     thread_id = cuda.threadIdx.x
@@ -133,14 +134,14 @@ def scanKernel(d_array, sum_array, len_array, log2_len_array):
 
 
     # using a shared array
-    s_array = cuda.shared.array(THREAD_PER_BLOCK, dtype=nb.int32)
+    s_array = cuda.shared.array(threads_per_block, dtype=nb.int32)
     if global_id < len_array:
         s_array[thread_id] = d_array[global_id]
     cuda.syncthreads()
 
 
     for d in range(log2_len_array):
-        k = THREAD_PER_BLOCK // 2 ** (d + 1)  # simulating the second for loop but with threads instead incrementing the index
+        k = threads_per_block // 2 ** (d + 1)  # simulating the second for loop but with threads instead incrementing the index
         if thread_id < k:
             s_array[thread_id * 2 ** (d + 1) + 2 ** (d + 1) - 1] += s_array[thread_id * 2 ** (d + 1) + 2 ** d - 1]
         cuda.syncthreads()
@@ -148,14 +149,14 @@ def scanKernel(d_array, sum_array, len_array, log2_len_array):
 
 
     if thread_id == 0:
-        sum_array[cuda.blockIdx.x] = s_array[THREAD_PER_BLOCK - 1]
-        s_array[THREAD_PER_BLOCK - 1] = 0
+        sum_array[cuda.blockIdx.x] = s_array[threads_per_block - 1]
+        s_array[threads_per_block - 1] = 0
 
     cuda.syncthreads()
 
     # Down-sweep phase
     for d in range(log2_len_array - 1, -1, -1):
-        k = THREAD_PER_BLOCK // 2 ** (d + 1)
+        k = threads_per_block // 2 ** (d + 1)
         if thread_id < k:
             t = s_array[thread_id * 2 ** (d + 1) + 2 ** d - 1]
             s_array[thread_id * 2 ** (d + 1) + 2 ** d - 1] = s_array[thread_id * 2 ** (d + 1) + 2 ** (d + 1) - 1]
@@ -183,10 +184,8 @@ if __name__ == "__main__":
 
     if args.tb:
         threads_per_block = args.tb
-        THREAD_PER_BLOCK = args.tb
     else:
         threads_per_block = 1024
-        THREAD_PER_BLOCK = 1024
 
     if args.independent:
         blocks_per_grid = int(np.ceil(len(array) / threads_per_block))
