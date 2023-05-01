@@ -17,7 +17,7 @@ for i in range(100):
     expected_output = scanDumb(my_input_for_expected)
     
     #actual_output = scanCPU(my_input_for_actual)
-    actual_output = scanGPU(my_input_for_actual,1024)
+    actual_output = scanGPU(my_input_for_actual)
     #actual_output = lol_scanGPU(my_input_for_actual,256,1)
     
     if not np.array_equal(expected_output, actual_output):

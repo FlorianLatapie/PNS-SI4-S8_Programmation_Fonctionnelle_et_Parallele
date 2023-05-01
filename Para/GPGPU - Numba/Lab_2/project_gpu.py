@@ -96,11 +96,11 @@ import math
 
 THREAD_PER_BLOCK = 1024
 
-def scanGPU(array, threads_per_block):
+def scanGPU(array):
     len_array = len(array)
-    log2_len_array = int(math.ceil(math.log2(threads_per_block)))
+    log2_len_array = int(math.ceil(math.log2(THREAD_PER_BLOCK)))
 
-    blocks_per_grid = math.ceil(len_array / threads_per_block)
+    blocks_per_grid = math.ceil(len_array / THREAD_PER_BLOCK)
 
     sum_array = np.zeros(blocks_per_grid, dtype=np.int32)
     test_array = np.zeros(blocks_per_grid, dtype=np.int32)
@@ -108,7 +108,7 @@ def scanGPU(array, threads_per_block):
     d_array = cuda.to_device(array)
     d_sum_array = cuda.to_device(test_array)
 
-    scanKernel[blocks_per_grid, threads_per_block](d_array, d_sum_array, len_array, log2_len_array)
+    scanKernel[blocks_per_grid, THREAD_PER_BLOCK](d_array, d_sum_array, len_array, log2_len_array)
 
     cuda.synchronize()
 
@@ -116,17 +116,15 @@ def scanGPU(array, threads_per_block):
     test_array = d_sum_array.copy_to_host()
 
     if blocks_per_grid > 1:
-        sum_array = scanGPU(test_array, threads_per_block)
+        sum_array = scanGPU(test_array, THREAD_PER_BLOCK)
         for i in range(0, blocks_per_grid):
-            array[i * threads_per_block: min(len_array, (i+1)*threads_per_block)] += sum_array[i]
+            array[i * THREAD_PER_BLOCK: min(len_array, (i+1)*THREAD_PER_BLOCK)] += sum_array[i]
         return array
     else:
         return array
 
 @cuda.jit
 def scanKernel(d_array, sum_array, len_array, log2_len_array):
-    #THREAD_PER_BLOCK = cuda.blockDim.x
-    threads_per_block = THREAD_PER_BLOCK
     # Up-sweep phase
     cuda.syncthreads()
     thread_id = cuda.threadIdx.x
@@ -134,14 +132,14 @@ def scanKernel(d_array, sum_array, len_array, log2_len_array):
 
 
     # using a shared array
-    s_array = cuda.shared.array(threads_per_block, dtype=nb.int32)
+    s_array = cuda.shared.array(THREAD_PER_BLOCK, dtype=nb.int32)
     if global_id < len_array:
         s_array[thread_id] = d_array[global_id]
     cuda.syncthreads()
 
 
     for d in range(log2_len_array):
-        k = threads_per_block // 2 ** (d + 1)  # simulating the second for loop but with threads instead incrementing the index
+        k = THREAD_PER_BLOCK // 2 ** (d + 1)  # simulating the second for loop but with threads instead incrementing the index
         if thread_id < k:
             s_array[thread_id * 2 ** (d + 1) + 2 ** (d + 1) - 1] += s_array[thread_id * 2 ** (d + 1) + 2 ** d - 1]
         cuda.syncthreads()
@@ -149,14 +147,14 @@ def scanKernel(d_array, sum_array, len_array, log2_len_array):
 
 
     if thread_id == 0:
-        sum_array[cuda.blockIdx.x] = s_array[threads_per_block - 1]
-        s_array[threads_per_block - 1] = 0
+        sum_array[cuda.blockIdx.x] = s_array[THREAD_PER_BLOCK - 1]
+        s_array[THREAD_PER_BLOCK - 1] = 0
 
     cuda.syncthreads()
 
     # Down-sweep phase
     for d in range(log2_len_array - 1, -1, -1):
-        k = threads_per_block // 2 ** (d + 1)
+        k = THREAD_PER_BLOCK // 2 ** (d + 1)
         if thread_id < k:
             t = s_array[thread_id * 2 ** (d + 1) + 2 ** d - 1]
             s_array[thread_id * 2 ** (d + 1) + 2 ** d - 1] = s_array[thread_id * 2 ** (d + 1) + 2 ** (d + 1) - 1]
@@ -183,12 +181,12 @@ if __name__ == "__main__":
         array = np.array([int(x) for x in f.readline().split(',')])
 
     if args.tb:
-        threads_per_block = args.tb
+        THREAD_PER_BLOCK = args.tb
     else:
-        threads_per_block = 1024
+        THREAD_PER_BLOCK = 1024
 
     if args.independent:
-        blocks_per_grid = int(np.ceil(len(array) / threads_per_block))
+        blocks_per_grid = int(np.ceil(len(array) / THREAD_PER_BLOCK))
     else:
         blocks_per_grid = 1
 
@@ -197,5 +195,5 @@ if __name__ == "__main__":
         res_array = scan_gpu(input_array, args.independent)
         res_array = res_array[1:]
 
-    res = scanGPU(array, threads_per_block)
+    res = scanGPU(array, THREAD_PER_BLOCK)
     print(','.join(map(str, res)), end='')
