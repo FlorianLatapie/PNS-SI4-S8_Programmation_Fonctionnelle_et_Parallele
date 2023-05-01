@@ -100,7 +100,7 @@ if __name__ == "__main__":
         blocks_per_grid = 1
 
     if args.inclusive:
-        array = np.insert(array, 0, 0)
+        array = np.insert(array, 0)
 
     res = scanGPU(array)
     print(','.join(map(str, res)))
