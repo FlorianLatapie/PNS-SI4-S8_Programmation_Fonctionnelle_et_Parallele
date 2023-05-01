@@ -102,7 +102,7 @@ def scanGPU(array, blocks_per_grid, threads_per_block):
 
     array = cuda.to_device(array)
 
-    scanKernel[threads_per_block, blocks_per_grid](array, full_len, log2_len_array)
+    scanKernel[blocks_per_grid, threads_per_block](array, full_len, log2_len_array)
 
     return array.copy_to_host()[0:len_array]
 
