@@ -92,15 +92,18 @@ At the end of your kernel, copy the information from shared memory to global mem
 import numpy as np
 from numba import cuda
 import numba as nb
+import math
 
 
-def scanGPU(array, blocks_per_grid, threads_per_block):
+def scanGPU(array, threads_per_block):
     len_array = len(array)
     log2_len_array = int(np.ceil(np.log2(len_array)))
     full_len = 2 ** log2_len_array
-    array = np.lib.pad(array, (0, full_len - len_array), 'maximum')
+    #array = np.lib.pad(array, (0, full_len - len_array), 'maximum')
 
     array = cuda.to_device(array)
+
+    blocks_per_grid = math.ceil(len_array / threads_per_block)
 
     scanKernel[blocks_per_grid, threads_per_block](array, full_len, log2_len_array)
 
