@@ -8,3 +8,7 @@
 ## TDs et TPs
 
 [Dossier TDs et TPs](./Para%20-%20TP%20et%20TD/README.md)
+
+## TPs et projet sur Cuda/Numba
+
+[Dossier Cuda/Numba](./GPGPU%20-%20Numba/README.md)
